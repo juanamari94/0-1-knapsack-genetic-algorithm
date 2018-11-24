@@ -8,6 +8,7 @@ MAX_WEIGHT = 15
 class BoundedKnapsackGA:
     # Thanks Python
     MAX_WEIGHT = MAX_WEIGHT
+    DEFAULT_POPULATION_LIMIT = 10
 
     @staticmethod
     def fitness_func(max_weight: int) -> Callable[[List[Gene]], int]:

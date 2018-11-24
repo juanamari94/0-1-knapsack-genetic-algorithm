@@ -13,13 +13,15 @@ from genetic_algorithm.Gene import Gene
 
 class Population:
     DEFAULT_MAXIMUM_SELECTION = 10
+    DEFAULT_POPULATION_LIMIT = 10
 
-    def __init__(self, chromosomes: List[Chromosome], max_weight=None):
+    def __init__(self, chromosomes: List[Chromosome],
+                 population_limit: int = BoundedKnapsackGA.DEFAULT_POPULATION_LIMIT,
+                 max_weight: int = BoundedKnapsackGA.MAX_WEIGHT):
+
         self.chromosomes = chromosomes
-        if not max_weight:
-            self.max_weight = BoundedKnapsackGA.MAX_WEIGHT
-        else:
-            self.max_weight = max_weight
+        self.max_weight = max_weight
+        self.population_limit = population_limit
 
     def selection(self, maximum_selection: int = DEFAULT_MAXIMUM_SELECTION,
                   fitness_func: Callable[[int], Callable[[List[Gene]], int]] = BoundedKnapsackGA.fitness_func):
@@ -33,6 +35,11 @@ class Population:
                                       reverse=True)
 
         return Population(selected_chromosomes[:maximum_selection])
+
+    def crossover(self, population_limit=None):
+        if not population_limit:
+            population_limit = self.population_limit
+        pass
 
     def __eq__(self, o: object) -> bool:
         if not isinstance(o, Population) or len(self.chromosomes) != len(o.chromosomes):

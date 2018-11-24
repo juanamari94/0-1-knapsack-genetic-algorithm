@@ -4,13 +4,17 @@ Author: Juan Amari
 File for the Chromosome class
 """
 
+from typing import List, Callable
+
+from genetic_algorithm.Gene import Gene
+
 
 class Chromosome:
 
-    def __init__(self, genes):
+    def __init__(self, genes: List[Gene]):
         self.genes = genes
 
-    def fitness_score(self, fitness_func):
+    def fitness_score(self, fitness_func: Callable[[List[Gene]], int]) -> int:
         return fitness_func(self.genes)
 
     def __eq__(self, other):

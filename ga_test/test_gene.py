@@ -9,7 +9,7 @@ class GeneTest(unittest.TestCase):
         gene = Gene(1, 2)
         choice_pool = [Gene(2, 3)]
         gene.mutate(choice_pool, mutation_chance=1.0)
-        self.assertEquals(gene, choice_pool[0])
+        self.assertEqual(gene, choice_pool[0])
 
     def test_gene_mutation_multiple_choice_pool(self):
         gene = Gene(1, 2)
@@ -28,4 +28,4 @@ class GeneTest(unittest.TestCase):
         expected_gene_after_mutation = Gene(1, 2)
         choice_pool = [Gene(2, 3), Gene(4, 5)]
         gene.mutate(choice_pool, mutation_chance=0.2, mutation_seed=2)
-        self.assertEquals(gene, expected_gene_after_mutation)
+        self.assertEqual(gene, expected_gene_after_mutation)

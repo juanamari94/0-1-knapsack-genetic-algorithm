@@ -6,16 +6,18 @@ File for the Gene class.
 
 import random
 
+from typing import List
+
 DEFAULT_MUTATION_CHANCE = 0.2
 
 
 class Gene:
 
-    def __init__(self, value, weight):
+    def __init__(self, value: int, weight: int):
         self.value = value
         self.weight = weight
 
-    def mutate(self, choice_pool, mutation_seed=None, mutation_chance=DEFAULT_MUTATION_CHANCE):
+    def mutate(self, choice_pool: List, mutation_seed=None, mutation_chance=DEFAULT_MUTATION_CHANCE):
         rng = random.Random()
         if mutation_seed:
             rng.seed(mutation_seed)

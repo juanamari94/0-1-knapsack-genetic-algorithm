@@ -37,7 +37,7 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# Unit ga_test / coverage reports
 htmlcov/
 .tox/
 .coverage
@@ -193,3 +193,5 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 
+Knapsack.pdf
+"Icon\r"

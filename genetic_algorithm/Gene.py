@@ -8,8 +8,6 @@ import random
 
 from typing import List
 
-DEFAULT_MUTATION_CHANCE = 0.2
-
 
 class Gene:
 
@@ -17,7 +15,7 @@ class Gene:
         self.value = value
         self.weight = weight
 
-    def mutate(self, choice_pool: List, mutation_seed=None, mutation_chance=DEFAULT_MUTATION_CHANCE):
+    def mutate(self, choice_pool: List, mutation_chance, mutation_seed=None):
         rng = random.Random()
         if mutation_seed:
             rng.seed(mutation_seed)

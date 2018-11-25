@@ -4,8 +4,8 @@ Author: Juan Amari
 Main file for the Population class.
 """
 
-import random
 import math
+import random
 from typing import List, Callable
 
 from genetic_algorithm.BoundedKnapsackGA import BoundedKnapsackGA
@@ -16,6 +16,7 @@ from genetic_algorithm.Gene import Gene
 class Population:
     DEFAULT_MAXIMUM_SELECTION = 10
     DEFAULT_POPULATION_LIMIT = 10
+    DEFAULT_MUTATION_PROBABILITY = 0.2
 
     def __init__(self, chromosomes: List[Chromosome],
                  population_limit: int = BoundedKnapsackGA.DEFAULT_POPULATION_LIMIT,
@@ -45,6 +46,10 @@ class Population:
             new_population.append(new_chromosome)
 
         return Population(new_population, self.population_limit, self.max_weight)
+
+    def mutate(self, gene_pool: List[Gene], mutation_probability: float = DEFAULT_MUTATION_PROBABILITY):
+        for chromosome in self.chromosomes:
+            chromosome.mutate(gene_pool, mutation_probability)
 
     def _perform_crossover(self, random_seed=None):
         if not random_seed:

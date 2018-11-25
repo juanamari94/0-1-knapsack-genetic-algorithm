@@ -4,6 +4,7 @@ from genetic_algorithm.BoundedKnapsackGA import BoundedKnapsackGA
 from genetic_algorithm.Chromosome import Chromosome
 from genetic_algorithm.Gene import Gene
 
+
 class ChromosomeTest(unittest.TestCase):
 
     def test_equality_between_chromosomes(self):
@@ -39,3 +40,10 @@ class ChromosomeTest(unittest.TestCase):
         other_chromosome = Chromosome(other_genes)
         other_score = other_chromosome.fitness_score(BoundedKnapsackGA.fitness_func(BoundedKnapsackGA.MAX_WEIGHT))
         self.assertTrue(score > 0 and score > other_score)
+
+    def test_mutation_does_not_alter_chromosome_length(self):
+        genes = [Gene(6, 1), Gene(8, 2), Gene(4, 3)]
+        expected_length = 3
+        chromosome = Chromosome(genes)
+        chromosome.mutate(genes, BoundedKnapsackGA.MUTATION_PROBABILITY)
+        self.assertTrue(len(chromosome.genes) == expected_length)

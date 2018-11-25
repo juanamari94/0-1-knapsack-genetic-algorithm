@@ -67,3 +67,15 @@ class PopulationTest(unittest.TestCase):
         new_pop = pop.crossover()
         for chrom in new_pop.chromosomes:
             self.assertTrue(len(chrom.genes) > 0)
+
+    def test_mutation_does_not_alter_chromosome_length(self):
+        population_limit = 10
+        chromosome1 = Chromosome([Gene(2, 1), Gene(3, 1), Gene(4, 1)])
+        chromosome2 = Chromosome([Gene(1, 2), Gene(3, 4), Gene(5, 6)])
+        chromosome3 = Chromosome([Gene(5, 1), Gene(8, 2), Gene(3, 1)])
+        expected_chromosome_length = 3
+        gene_pool = list(set(chromosome1.genes).union(set(chromosome2.genes)).union(set(chromosome3.genes)))
+        pop = Population([chromosome1, chromosome2, chromosome3], population_limit=population_limit)
+        pop.mutate(gene_pool, 0.2)
+        for chromosome in pop.chromosomes:
+            self.assertTrue(len(chromosome.genes), expected_chromosome_length)

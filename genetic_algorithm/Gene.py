@@ -32,3 +32,9 @@ class Gene:
 
     def __hash__(self):
         return hash((self.value, self.weight))
+
+    def __repr__(self):
+        return "Value: {} | Weight: {}".format(self.value, self.weight)
+
+    def copy(self):
+        return Gene(self.value, self.weight)

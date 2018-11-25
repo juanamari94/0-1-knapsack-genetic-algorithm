@@ -32,10 +32,9 @@ class Population:
         if maximum_selection <= 0:
             raise ValueError("Maximum Selection can't be less than 1.")
 
-        selected_chromosomes = sorted(self.chromosomes,
-                                      key=lambda chromosome: chromosome.fitness_score(
-                                          fitness_func(self.max_weight)),
-                                      reverse=True)
+        fitness_score = [chromosome.fitness_score(fitness_func(self.max_weight)) for chromosome in self.chromosomes]
+        zipped_chromosomes = zip(self.chromosomes, fitness_score)
+        selected_chromosomes, fitness_scores = zip(*sorted(zipped_chromosomes, key=lambda x: x[1], reverse=True))
 
         return Population(selected_chromosomes[:maximum_selection])
 

@@ -27,3 +27,6 @@ class Chromosome:
 
     def __len__(self):
         return len(self.genes)
+
+    def __repr__(self):
+        return "; ".join(str(gene) for gene in self.genes)

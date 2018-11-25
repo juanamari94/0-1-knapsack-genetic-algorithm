@@ -6,6 +6,8 @@ from genetic_algorithm.Chromosome import Chromosome
 from genetic_algorithm.Gene import Gene
 from helpers.combinatorics import powerset
 
+import copy
+
 MAX_WEIGHT = 15
 
 
@@ -35,10 +37,17 @@ class BoundedKnapsackGA:
 
     def run(self, filepath):
         gene_pool = BoundedKnapsackGA.load_from_file(filepath)
-        initial_pop = self._initialize_first_population(list(powerset(gene_pool)))
-        selected_pop = initial_pop.selection(self.pop_limit, BoundedKnapsackGA.fitness_func)
-        crossover_pop = selected_pop.crossover()
-        crossover_pop.mutate(gene_pool, self.mutation_probability)
+        current_pop = self._initialize_first_population(list(powerset(copy.deepcopy(gene_pool))))
+        for i in range(self.max_generations):
+            print("Generation {}".format(i + 1))
+            selected_pop = current_pop.selection(self.pop_limit, BoundedKnapsackGA.fitness_func)
+            crossover_pop = selected_pop.crossover()
+            crossover_pop.mutate(gene_pool, self.mutation_probability)
+            current_pop = crossover_pop
+            print("Current population:")
+            for chromosome in current_pop.chromosomes:
+                print(str(chromosome))
+        return current_pop
 
     @staticmethod
     def load_from_file(filepath: str) -> List[Gene]:

@@ -11,11 +11,11 @@ from genetic_algorithm.Gene import Gene
 
 class Chromosome:
 
-    def fitness_score(self, fitness_func: Callable) -> int:
-        return fitness_func(self.genes)
-
     def __init__(self, genes: List[Gene]):
         self.genes = genes
+
+    def fitness_score(self, fitness_func: Callable) -> int:
+        return fitness_func(self.genes)
 
     def __eq__(self, other):
         return isinstance(other, Chromosome) and len(other) == len(self) and all(

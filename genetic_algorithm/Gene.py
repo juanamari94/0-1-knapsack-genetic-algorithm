@@ -31,3 +31,6 @@ class Gene:
 
     def __eq__(self, o: object) -> bool:
         return isinstance(o, Gene) and self.value == o.value and self.weight == o.weight
+
+    def __hash__(self):
+        return hash((self.value, self.weight))

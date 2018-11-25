@@ -4,6 +4,8 @@ Author: Juan Amari
 Main file for the Population class.
 """
 
+import random
+import math
 from typing import List, Callable
 
 from genetic_algorithm.BoundedKnapsackGA import BoundedKnapsackGA
@@ -36,10 +38,30 @@ class Population:
 
         return Population(selected_chromosomes[:maximum_selection])
 
-    def crossover(self, population_limit=None):
-        if not population_limit:
-            population_limit = self.population_limit
-        pass
+    def crossover(self):
+        new_population = []
+        for i in range(self.population_limit):
+            new_chromosome = self._perform_crossover()
+            new_population.append(new_chromosome)
+
+        return Population(new_population, self.population_limit, self.max_weight)
+
+    def _perform_crossover(self, random_seed=None):
+        if not random_seed:
+            rng = random.Random()
+        else:
+            rng = random.Random(random_seed)
+
+        # Choose two parents randomly
+        chain = []
+        parents = rng.sample(self.chromosomes, 2)
+        for parent in parents:
+            # Sample half of each parent
+            genes = rng.sample(parent.genes, math.ceil(len(parent.genes) / 2))
+            chain.extend(genes)
+
+        # Return unique genes. This is a 0-1 knapsack after all.
+        return Chromosome(list(set(chain)))
 
     def __eq__(self, o: object) -> bool:
         if not isinstance(o, Population) or len(self.chromosomes) != len(o.chromosomes):

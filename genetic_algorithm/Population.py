@@ -33,7 +33,7 @@ class Population:
         fitness_score = [chromosome.fitness_score(fitness_func(self.max_weight)) for chromosome in self.chromosomes]
         zipped_chromosomes = zip(self.chromosomes, fitness_score)
         selected_chromosomes, fitness_scores = zip(*sorted(zipped_chromosomes, key=lambda x: x[1], reverse=True))
-        print("Best fitness: {}".format(fitness_score[0]))
+        print("Best fitness: {} for {}".format(fitness_score[0], selected_chromosomes[0]))
 
         return Population(selected_chromosomes[:maximum_selection])
 

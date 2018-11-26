@@ -66,12 +66,9 @@ class BoundedKnapsackGA:
 
         def parameterized_fitness_func(chromosome: Chromosome) -> int:
             # https://www.dataminingapps.com/2017/03/solving-the-knapsack-problem-with-a-simple-genetic-algorithm/
-            profits = sum([gene.value for gene in chromosome.genes])
-            weights = sum([gene.weight for gene in chromosome.genes])
-            item_count = sum([gene.is_active for gene in chromosome.genes])
-            fitness = profits * item_count
-            # penalty = weights * abs((item_count * weights) - max_weight)
-            penalty = abs((item_count * weights) - max_weight)
-            return fitness - penalty
+            profits, weights = chromosome.calculate_active_values_and_weights()
+            if weights >= max_weight:
+                return 0
+            return profits
 
         return parameterized_fitness_func

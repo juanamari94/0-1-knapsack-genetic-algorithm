@@ -21,7 +21,17 @@ class Chromosome:
         for gene in self.genes:
             gene.mutate(mutation_probability)
 
-    def _calculate_active_length(self):
+    def calculate_active_values_and_weights(self):
+        weights = 0
+        values = 0
+        for gene in self.genes:
+            if gene.is_active:
+                weights += gene.weight
+                values += gene.value
+
+        return values, weights
+
+    def calculate_active_length(self):
         return sum([gene.is_active for gene in self.genes])
 
     def __eq__(self, other):

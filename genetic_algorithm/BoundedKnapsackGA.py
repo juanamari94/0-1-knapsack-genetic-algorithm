@@ -1,12 +1,10 @@
+import random
 from typing import List, Callable
 
 import numpy as np
 
 from genetic_algorithm.Chromosome import Chromosome
 from genetic_algorithm.Gene import Gene
-from helpers.combinatorics import powerset
-
-import copy
 
 MAX_WEIGHT = 15
 
@@ -27,26 +25,28 @@ class BoundedKnapsackGA:
         self.max_generations = max_generations
         self.mutation_probability = mutation_probability
 
-    def _initialize_first_population(self, gene_powerset: list):
+    def _initialize_first_population(self, gene_pool: List[Gene]):
         from genetic_algorithm.Population import Population
-        chromosomes = []
-        for genes in gene_powerset:
-            if genes:
-                chromosomes.append(Chromosome(genes))
-        return Population(chromosomes, self.max_weight)
+        population = list()
+        population.append(Chromosome(gene_pool))
+        for _ in range(self.pop_limit):
+            new_chromosome = []
+            for gene in gene_pool:
+                toss = bool(random.getrandbits(1))
+                new_chromosome.append(Gene(gene.value, gene.weight, toss))
+            population.append(Chromosome(new_chromosome))
+        return Population(population, population_limit=self.pop_limit)
 
     def run(self, filepath):
         gene_pool = BoundedKnapsackGA.load_from_file(filepath)
-        current_pop = self._initialize_first_population(list(powerset(copy.deepcopy(gene_pool))))
+        current_pop = self._initialize_first_population(gene_pool)
         for i in range(self.max_generations):
             print("Generation {}".format(i + 1))
             selected_pop = current_pop.selection(self.pop_limit, BoundedKnapsackGA.fitness_func)
+            print("Selected population: {}".format(selected_pop))
             crossover_pop = selected_pop.crossover()
-            crossover_pop.mutate(gene_pool, self.mutation_probability)
+            crossover_pop.mutate(self.mutation_probability)
             current_pop = crossover_pop
-            print("Current population:")
-            for chromosome in current_pop.chromosomes:
-                print(str(chromosome))
         return current_pop
 
     @staticmethod
@@ -54,7 +54,7 @@ class BoundedKnapsackGA:
         data = np.loadtxt(filepath)
         genes = []
         for row in data:
-            genes.append(Gene(row[0], row[1]))
+            genes.append(Gene(row[0], row[1], True))
         return genes
 
     @staticmethod

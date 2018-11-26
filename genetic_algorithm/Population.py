@@ -4,13 +4,11 @@ Author: Juan Amari
 Main file for the Population class.
 """
 
-import math
 import random
 from typing import List, Callable
 
 from genetic_algorithm.BoundedKnapsackGA import BoundedKnapsackGA
 from genetic_algorithm.Chromosome import Chromosome
-from genetic_algorithm.Gene import Gene
 
 
 class Population:
@@ -35,6 +33,7 @@ class Population:
         fitness_score = [chromosome.fitness_score(fitness_func(self.max_weight)) for chromosome in self.chromosomes]
         zipped_chromosomes = zip(self.chromosomes, fitness_score)
         selected_chromosomes, fitness_scores = zip(*sorted(zipped_chromosomes, key=lambda x: x[1], reverse=True))
+        print("Best fitness: {}".format(fitness_score[0]))
 
         return Population(selected_chromosomes[:maximum_selection])
 
@@ -62,11 +61,12 @@ class Population:
         parent1 = parents[0]
         parent2 = parents[1]
         chromosome_length = len(parent1.genes) // 2
+        print("Performing crossover between: {} and {}.".format(str(parent1), str(parent2)))
         chain.extend(parent1.genes[:chromosome_length])
         chain.extend(parent2.genes[chromosome_length:])
 
         # Return unique genes. This is a 0-1 knapsack after all.
-        return Chromosome(list(set(chain)))
+        return Chromosome(list(chain))
 
     def __eq__(self, o: object) -> bool:
         if not isinstance(o, Population) or len(self.chromosomes) != len(o.chromosomes):
@@ -80,3 +80,6 @@ class Population:
                                   BoundedKnapsackGA.fitness_func(self.max_weight)))
 
         return this_sorted == other_sorted
+
+    def __repr__(self):
+        return str(self.chromosomes)

@@ -32,4 +32,4 @@ class Chromosome:
         return len(self.genes)
 
     def __repr__(self):
-        return "; ".join(str(gene) for gene in self.genes)
+        return "".join(str(int(gene.is_active)) for gene in self.genes)

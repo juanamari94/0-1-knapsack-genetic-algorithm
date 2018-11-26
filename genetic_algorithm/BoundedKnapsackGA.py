@@ -64,6 +64,10 @@ class BoundedKnapsackGA:
     def run(self, filepath):
         from genetic_algorithm.Population import Population
         gene_pool = BoundedKnapsackGA.load_from_file(filepath)
+        logger.info("### START ###")
+        logger.info("Our items are:")
+        for i, gene in enumerate(gene_pool):
+            logger.info("Item {} - Value: {} | Weight: {}".format(i, gene.value, gene.weight))
         current_pop = self._initialize_first_population(gene_pool)
         champion = None
         champion_fitness = None

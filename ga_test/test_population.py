@@ -44,7 +44,7 @@ class PopulationTest(unittest.TestCase):
         pop = Population([chromosome1, chromosome2])
         crossover_chromosome = pop._perform_crossover(1)
         expected_crossover_chromosome = Chromosome(
-            [Gene(5, 6, True), Gene(2, 1, True), Gene(3, 4, True)])
+            [Gene(2, 1, True), Gene(3, 4, True), Gene(5, 6, True)])
         self.assertEqual(crossover_chromosome, expected_crossover_chromosome)
 
     def test_crossover_returns_same_population_size(self):

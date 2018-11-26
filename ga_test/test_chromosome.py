@@ -26,11 +26,11 @@ class ChromosomeTest(unittest.TestCase):
         score = chromosome.fitness_score(BoundedKnapsackGA.fitness_func(BoundedKnapsackGA.MAX_WEIGHT))
         self.assertTrue(score > 0)
 
-    def test_fitness_func_negative_fitness(self):
+    def test_fitness_func_bad_fitness(self):
         genes = [Gene(1, 5, True), Gene(2, 8, True), Gene(3, 2, True)]
         chromosome = Chromosome(genes)
         score = chromosome.fitness_score(BoundedKnapsackGA.fitness_func(BoundedKnapsackGA.MAX_WEIGHT))
-        self.assertTrue(score < 0)
+        self.assertTrue(score == 0)
 
     def test_fitness_positive_fitness_high_values(self):
         genes = [Gene(6, 1, True), Gene(8, 2, True), Gene(4, 3, True)]

@@ -10,6 +10,10 @@ from typing import List, Callable
 from genetic_algorithm.BoundedKnapsackGA import BoundedKnapsackGA
 from genetic_algorithm.Chromosome import Chromosome
 
+import logging
+
+logger = logging.getLogger("bounded-knapsack-ga-logger")
+
 
 class Population:
     DEFAULT_MAXIMUM_SELECTION = 10
@@ -30,12 +34,20 @@ class Population:
         if maximum_selection <= 0:
             raise ValueError("Maximum Selection can't be less than 1.")
 
+        chromosomes, fitness_scores = self.calculate_fitness_scores(fitness_func)
+        logger.info("Best fitness: {} for {}".format(fitness_scores[0], chromosomes[0]))
+
+        return Population(chromosomes[:maximum_selection],
+                          population_limit=self.population_limit,
+                          max_weight=self.max_weight)
+
+    def calculate_fitness_scores(self, fitness_func: Callable[
+        [int], Callable[[Chromosome], int]] = BoundedKnapsackGA.fitness_func):
+
         fitness_score = [chromosome.fitness_score(fitness_func(self.max_weight)) for chromosome in self.chromosomes]
         zipped_chromosomes = zip(self.chromosomes, fitness_score)
-        selected_chromosomes, fitness_scores = zip(*sorted(zipped_chromosomes, key=lambda x: x[1], reverse=True))
-        print("Best fitness: {} for {}".format(fitness_score[0], selected_chromosomes[0]))
-
-        return Population(selected_chromosomes[:maximum_selection])
+        chromosomes, fitness_scores = zip(*sorted(zipped_chromosomes, key=lambda x: x[1], reverse=True))
+        return chromosomes, fitness_scores
 
     def crossover(self):
         new_population = []
@@ -61,7 +73,6 @@ class Population:
         parent1 = parents[0]
         parent2 = parents[1]
         chromosome_length = len(parent1.genes) // 2
-        print("Performing crossover between: {} and {}.".format(str(parent1), str(parent2)))
         chain.extend(parent1.genes[:chromosome_length])
         chain.extend(parent2.genes[chromosome_length:])
 

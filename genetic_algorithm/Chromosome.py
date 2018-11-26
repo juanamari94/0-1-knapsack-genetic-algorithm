@@ -15,11 +15,14 @@ class Chromosome:
         self.genes = genes
 
     def fitness_score(self, fitness_func: Callable) -> int:
-        return fitness_func(self.genes)
+        return fitness_func(self)
 
-    def mutate(self, gene_pool: List[Gene], mutation_probability: float):
+    def mutate(self, mutation_probability: float):
         for gene in self.genes:
-            gene.mutate(gene_pool, mutation_probability)
+            gene.mutate(mutation_probability)
+
+    def _calculate_active_length(self):
+        return sum([gene.is_active for gene in self.genes])
 
     def __eq__(self, other):
         return isinstance(other, Chromosome) and len(other) == len(self) and all(

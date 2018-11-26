@@ -27,7 +27,7 @@ class Population:
         self.population_limit = population_limit
 
     def selection(self, maximum_selection: int = DEFAULT_MAXIMUM_SELECTION,
-                  fitness_func: Callable[[int], Callable[[List[Gene]], int]] = BoundedKnapsackGA.fitness_func):
+                  fitness_func: Callable[[int], Callable[[Chromosome], int]] = BoundedKnapsackGA.fitness_func):
 
         if maximum_selection <= 0:
             raise ValueError("Maximum Selection can't be less than 1.")
@@ -46,9 +46,9 @@ class Population:
 
         return Population(new_population, self.population_limit, self.max_weight)
 
-    def mutate(self, gene_pool: List[Gene], mutation_probability: float = DEFAULT_MUTATION_PROBABILITY):
+    def mutate(self, mutation_probability: float = DEFAULT_MUTATION_PROBABILITY):
         for chromosome in self.chromosomes:
-            chromosome.mutate(gene_pool, mutation_probability)
+            chromosome.mutate(mutation_probability)
 
     def _perform_crossover(self, random_seed=None):
         if not random_seed:
@@ -59,10 +59,11 @@ class Population:
         # Choose two parents randomly
         chain = []
         parents = rng.sample(self.chromosomes, 2)
-        for parent in parents:
-            # Sample half of each parent
-            genes = rng.sample(parent.genes, math.ceil(len(parent.genes) / 2))
-            chain.extend(genes)
+        parent1 = parents[0]
+        parent2 = parents[1]
+        chromosome_length = len(parent1.genes) // 2
+        chain.extend(parent1.genes[:chromosome_length])
+        chain.extend(parent2.genes[chromosome_length:])
 
         # Return unique genes. This is a 0-1 knapsack after all.
         return Chromosome(list(set(chain)))

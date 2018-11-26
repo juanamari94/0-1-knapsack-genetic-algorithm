@@ -1,3 +1,8 @@
+"""
+Author: Juan Amari
+Test class for the Gene class.
+"""
+
 import unittest
 
 from genetic_algorithm.Gene import Gene

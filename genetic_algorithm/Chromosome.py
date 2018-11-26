@@ -15,13 +15,27 @@ class Chromosome:
         self.genes = genes
 
     def fitness_score(self, fitness_func: Callable) -> int:
+        """
+        Calculates the fitness score of the chromosome given a fitness function.
+        :param fitness_func: The fitness function to use.
+        :return: An integer representing the calculated fitness.
+        """
         return fitness_func(self)
 
     def mutate(self, mutation_probability: float):
+        """
+        Attempts to mutate each gene given the probability of mutation parameter.
+        :param mutation_probability: Parameter that represents how likely is a gene to mutate.
+        """
         for gene in self.genes:
             gene.mutate(mutation_probability)
 
     def calculate_active_values_and_weights(self):
+        """
+        Since each chromosome is represented by activated and non-activated genes, this method returns the sum of values
+        and weights of all activates genes.
+        :return: The sum of values and weights of all activates genes.
+        """
         weights = 0
         values = 0
         for gene in self.genes:
@@ -32,6 +46,9 @@ class Chromosome:
         return values, weights
 
     def calculate_active_length(self):
+        """
+        :return: Returns the amount of active genes in this chromosome.
+        """
         return sum([gene.is_active for gene in self.genes])
 
     def __eq__(self, other):

@@ -15,6 +15,11 @@ class Gene:
         self.is_active = is_active
 
     def mutate(self, mutation_chance, mutation_seed=None):
+        """
+        Mutates the gene in-place if a randomly generated number is less than the mutation probability.
+        :param mutation_chance: Probability to mutate.
+        :param mutation_seed: A seed to pre-determine the random generated number.
+        """
         rng = random.Random()
         if mutation_seed:
             rng.seed(mutation_seed)

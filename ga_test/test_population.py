@@ -1,3 +1,7 @@
+"""
+Author: Juan Amari
+Test class for the Population class.
+"""
 import unittest
 
 from genetic_algorithm.Chromosome import Chromosome

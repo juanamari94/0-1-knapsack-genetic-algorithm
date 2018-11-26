@@ -1,3 +1,8 @@
+"""
+Author: Juan Amari
+Test class for the Chromosome class.
+"""
+
 import unittest
 
 from genetic_algorithm.BoundedKnapsackGA import BoundedKnapsackGA

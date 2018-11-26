@@ -1,3 +1,8 @@
+"""
+Author: Juan Amari
+Class for the Bounded Knapsack Genetic Algorithm.
+"""
+
 import copy
 import logging
 import random
@@ -15,6 +20,9 @@ logger = logging.getLogger("bounded-knapsack-ga-logger")
 
 
 class BoundedKnapsackGA:
+    """
+    Main wrapper class for the Bounded Knapsack Genetic Algorithm.
+    """
     # Thanks Python
     MAX_WEIGHT = MAX_WEIGHT
     DEFAULT_POPULATION_LIMIT = 200
@@ -34,6 +42,11 @@ class BoundedKnapsackGA:
         self.elite_ratio = elite_ratio
 
     def _initialize_first_population(self, gene_pool: List[Gene]):
+        """
+        Helper method that creates a new population with randomly generated gene states.
+        :param gene_pool: The pool of genes that we can use for each chromosome.
+        :return: A population of chromosomes composed of genes.
+        """
         from genetic_algorithm.Population import Population
         population = list()
         population.append(Chromosome(gene_pool))
@@ -46,7 +59,12 @@ class BoundedKnapsackGA:
         return Population(population, population_limit=self.pop_limit)
 
     def _choose_best_chromosome_across_generations(self, candidate, champion):
-
+        """
+        Helper function that is used to determine the best chromosome seen across generations.
+        :param candidate: Canditate that may become the new champion gene.
+        :param champion: Current champion gene.
+        :return: The new champion gene, if there's one.
+        """
         candidate_fitness = candidate.fitness_score(
             BoundedKnapsackGA.fitness_func(self.max_weight))
         if champion:
@@ -62,6 +80,12 @@ class BoundedKnapsackGA:
         return champion, champion_fitness
 
     def run(self, filepath):
+        """
+        Runs the genetic algorithm using chromosome elitism and non-elitist crossover. The best chromosomes are preserved
+        across generations unless they mutate or are displaced by better chromosomes.
+        :param filepath: The path of the file containing the gene pool.
+        :return: The population of the last generation along with the best chromosone seen across all iterations.
+        """
         from genetic_algorithm.Population import Population
         gene_pool = BoundedKnapsackGA.load_from_file(filepath)
         logger.info("### START ###")
@@ -104,6 +128,11 @@ class BoundedKnapsackGA:
 
     @staticmethod
     def load_from_file(filepath: str) -> List[Gene]:
+        """
+        Attemps to load the gene data from a file.
+        :param filepath: The path of the file.
+        :return: A list of genes generated from the file specificall for the knapsack problem.
+        """
         try:
             data = np.loadtxt(filepath)
             genes = []
@@ -116,12 +145,22 @@ class BoundedKnapsackGA:
 
     @staticmethod
     def fitness_func(max_weight: int) -> Callable[[Chromosome], int]:
+        """
+        Curried fitness function for the Bounded Knapsack Problem.
+        :param max_weight: The maximum weight constraint used in this specific fitness function.
+        :return: A function that will calculate the fitness of the chromosome with the given max_weight.
+        """
         # https://www.python-course.eu/currying_in_python.php
 
         if not max_weight:
             max_weight = MAX_WEIGHT
 
         def parameterized_fitness_func(chromosome: Chromosome) -> int:
+            """
+            Fitness function that calculates the fitness for a given chromosome.
+            :param chromosome: The given chromosome.
+            :return: An integer denoting the fitness of the chromosome.
+            """
             profits, weights = chromosome.calculate_active_values_and_weights()
             if weights >= max_weight:
                 return 0

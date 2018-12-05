@@ -27,8 +27,8 @@ class BoundedKnapsackGA:
     MAX_WEIGHT = MAX_WEIGHT
     DEFAULT_POPULATION_LIMIT = 200
     MAX_GENERATIONS = 50
-    MUTATION_PROBABILITY = 0.2
-    ELITE_RATIO = 0.4
+    MUTATION_PROBABILITY = 0.1
+    ELITE_RATIO = 0.2
 
     def __init__(self, max_weight=MAX_WEIGHT,
                  pop_limit=DEFAULT_POPULATION_LIMIT,
@@ -108,7 +108,7 @@ class BoundedKnapsackGA:
                                                                                          champion)
 
             logger.info("Best chromosomes in the generation: {}".format(str(elite_chromosomes)))
-            logger.info("Best chromosome seen so far is: {} with fitness: {}".format(str(champion), champion_fitness))
+            logger.debug("Best chromosome seen so far is: {} with fitness: {}".format(str(champion), champion_fitness))
 
             non_elite_chromosomes = selected_pop.chromosomes[elite_length:]
             crossover_candidates_pop = Population(non_elite_chromosomes, self.pop_limit - elite_length, self.max_weight)
@@ -162,8 +162,6 @@ class BoundedKnapsackGA:
             :return: An integer denoting the fitness of the chromosome.
             """
             profits, weights = chromosome.calculate_active_values_and_weights()
-            if weights >= max_weight:
-                return 0
-            return profits
+            return profits - weights if weights > MAX_WEIGHT else profits
 
         return parameterized_fitness_func

@@ -8,6 +8,7 @@ from genetic_algorithm.BoundedKnapsackGA import BoundedKnapsackGA
 logging.basicConfig(filename='log.txt', level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("bounded-knapsack-ga-logger")
+logger.setLevel(logging.DEBUG)
 
 handler = logging.StreamHandler(sys.stdout)
 handler.setLevel(logging.DEBUG)
@@ -37,7 +38,7 @@ def run(items_filename, max_weight, population_limit, max_generations, mutation_
     pop, champion, champion_fitness = bk_ga.run(items_filename)
     logger.info("### END ###")
     logger.info("The last population was: {}".format(str(pop.chromosomes)))
-    logger.info(
+    logger.debug(
         "The champion chromosome seen accross generations was: {} with a fitness score of {}.".format(str(champion),
                                                                                                       champion_fitness))
 
